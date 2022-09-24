@@ -1,5 +1,6 @@
 import React, {useState} from "react";
 import "./login.css";
+import axios from "axios";
 
 const Login = () => {
 
@@ -17,6 +18,11 @@ const Login = () => {
         })
     }
 
+    const login = () => {
+        axios.post("http://localhost:9002/login/", user)
+        .then(res => console.log(res))
+    }
+
     return (
         <div className="login">
             {console.log("User", user)}
@@ -26,7 +32,7 @@ const Login = () => {
                 <input type="password" name="password" value={user.password} placeholder="Enter Password" onChange={handleChange}/>
                 <button className="button">Login</button>
                 or
-                <button className="button">Register</button>
+                <button className="button" onClick={login}>Register</button>
             </div>
         </div>
     )

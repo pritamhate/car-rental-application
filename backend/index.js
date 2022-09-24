@@ -24,13 +24,45 @@ const User = new mongoose.model("User", userSchema);
 
 //Routes
 app.post("/login", (req, res)  => {
-    res.send("My API Login");
+    //res.send("My API Login");
+    const {email, password} = req.body;
+    User.findOne({email: email}, (err, user) => {
+        if(user){
+            if(password === user.password){
+                res.send({message: "Login Successfully", user: user});
+            } else {
+                res.send({message: "Password did not match"})
+            }
+        } else {
+            res.send({message: "User not registered"});
+        }
+    })
 });
 
 app.post("/register", (req, res)  => {
-    res.send("My API Register");
+    //res.send("My API Register");
+    //console.log(req.body);
+    const {name, email, password} = req.body;
+    User.findOne({email: email}, (err, user) => {
+        if(user){
+            res.send({message: "User already registered"})
+        } else {
+            const user = new User({
+                name,
+                email,
+                password
+            });
+            user.save(err => {
+                if(err) {
+                    res.send(err)
+                } else {
+                    res.send({message: "Successfully Registered"})
+                }
+            });
+        }
+    })
 });
 
-app.listen(1234,() => {
+app.listen(9002,() => {
     console.log("DB started at port 9002");
 })
