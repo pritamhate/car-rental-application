@@ -1,8 +1,16 @@
 import React, {useState} from "react";
 import "./login.css";
 import axios from "axios";
+import {useNavigate} from "react-router-dom";
 
-const Login = () => {
+const Login = ({setLoginUser}) => {
+
+    const history = useNavigate();
+
+    const handleClick = () => {
+        // 👇️ navigate programmatically
+        history('/register');
+      };
 
     const [user, setUser] = useState({
         email: "",
@@ -20,19 +28,23 @@ const Login = () => {
 
     const login = () => {
         axios.post("http://localhost:9002/login/", user)
-        .then(res => console.log(res))
+        .then(res => {
+            alert(res.data.message);
+            setLoginUser(res.data.user);
+            history('/');
+        })
     }
 
     return (
         <div className="login">
-            {console.log("User", user)}
+            {/* {console.log("User", user)} */}
             <h1>Login</h1>
             <div>
                 <input type="text" name="email" value={user.email} placeholder="Enter Email" onChange={handleChange}/>
                 <input type="password" name="password" value={user.password} placeholder="Enter Password" onChange={handleChange}/>
                 <button className="button" onClick={login}>Login</button>
                 or
-                <button className="button">Register</button>
+                <button className="button" onClick={handleClick}>Register</button>
             </div> 
         </div>
     )
