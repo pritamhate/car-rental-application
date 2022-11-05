@@ -50,6 +50,7 @@ app.post("/register", (req, res)  => {
             const user = new User({
                 name,
                 email,
+                usertype,
                 password
             });
             user.save(err => {
